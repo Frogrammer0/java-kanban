@@ -1,13 +1,12 @@
 public class Task {
     protected String title;
     protected String description;
-    protected int id;
+    private int id;
     protected Status status;
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
-        this.id = TaskManager.assignId();
         this.status = status;
     }
 
@@ -39,11 +38,36 @@ public class Task {
     }
 
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
 
     public int getId() {
         return id;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

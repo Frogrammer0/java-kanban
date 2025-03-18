@@ -1,11 +1,11 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EpicTask extends Task {
-    ArrayList<Task> subTasks;
+    HashMap<Integer, SubTask> subTasks;
 
-    public EpicTask(String title, String description, Status status) {
-        super(title, description, status);
-        subTasks = new ArrayList<>();
+    public EpicTask(String title, String description) {
+        super(title, description, Status.NEW);
+        subTasks = new HashMap<>();
     }
 
     @Override
@@ -13,35 +13,46 @@ public class EpicTask extends Task {
         return "\nEpicTask{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
+                ", id=" + getId() +
                 ", status=" + status +
-        "\nsubTasks=" +subTasks +
+                "\nsubTasks=" + subTasks +
                 '}';
     }
 
-    public ArrayList<Task> getSubTasks() {
+    public HashMap<Integer, SubTask> getSubTasks() {
         return subTasks;
     }
 
-    public void setSubTask(SubTask subTask) { //метод для добавления подзадачи в спискок эпика
-        subTasks.add(subTask);
+    public void setSubTask(SubTask subTask) {//метод для добавления подзадачи в спискок эпика
+        subTasks.put(subTask.getId(), subTask);
     }
 
-    public void setStatus(EpicTask epicTask) { //метод для обновления статуса эпика
-        int a = epicTask.subTasks.size();
-        for (Task sub : epicTask.subTasks) {
+    public void removeSub(int id) {
+        subTasks.remove(id);
+    }
+
+    public void removeAllSubTasks() {
+        subTasks.clear();
+
+    }
+
+    public void setStatus() { //метод для обновления статуса эпика
+        boolean hasNew = false;
+        boolean hasDone = false;
+
+        for (SubTask sub : this.subTasks.values()) {
             if (sub.status == Status.NEW) {
-                a--;
+                hasNew = true;
             } else if (sub.status == Status.DONE) {
-                a++;
+                hasDone = true;
             }
         }
-        if (a == 0) {
-            epicTask.status = Status.NEW;
-        } else if (a == (2*epicTask.subTasks.size())) {
-            epicTask.status = Status.DONE;
-        } else {epicTask.status = Status.IN_PROGRESS;}
 
+        if (hasNew && hasDone) {
+            this.setStatus(Status.IN_PROGRESS);
+        }
+
+        this.status = hasDone ? Status.DONE : Status.NEW;
     }
 
 

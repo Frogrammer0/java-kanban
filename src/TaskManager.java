@@ -4,126 +4,138 @@ import java.util.HashMap;
 public class TaskManager {
 
     private static int idNumber = 0;
-    public static HashMap<Integer, Task> taskMap = new HashMap<>();
+    public HashMap<Integer, Task> taskMap = new HashMap<>();
+    public HashMap<Integer, EpicTask> epicMap = new HashMap<>();
+    public HashMap<Integer, SubTask> subMap = new HashMap<>();
 
 
-    public static int assignId() { //метод для присвоения Ид
+    private int assignId() { //метод для присвоения Ид
         idNumber++;
         return idNumber;
     }
 
-    public static Task getTask(int id) {  //метод для получения обычной задачи
+    public Task getTask(int id) { //метод для получения обычной задачи
         return taskMap.get(id);
     }
 
-    public static HashMap<Integer, Task> getAllTask() { //метод для получения всех обычных задач
-        HashMap<Integer, Task> AllTask = new HashMap<>();
-        int j = 1;
+    public ArrayList<Task> getAllTask() {  //метод для получения всех обычных задач
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (int i : taskMap.keySet()) {
+            tasks.add(taskMap.get(i));
+        }
+        return tasks;
+    }
 
-        for (int i = 1; i <= idNumber; i++) {
-            if (getTask(i) != null && getTask(i).getClass() == Task.class) {
 
-                AllTask.put(j++, getTask(i));
+    public ArrayList<EpicTask> getAllEpicTask() { //метод для получения всех эпиков
+        ArrayList<EpicTask> tasks = new ArrayList<>();
+        for (int i : epicMap.keySet()) {
+            tasks.add(epicMap.get(i));
+        }
+        return tasks;
+    }
+
+    public ArrayList<SubTask> getAllSubTask() { //метод для получения всех подзадачи из всех эпиков
+        ArrayList<SubTask> tasks = new ArrayList<>();
+        for (int i : subMap.keySet()) {
+            tasks.add(subMap.get(i));
+        }
+        return tasks;
+    }
+
+    public ArrayList<Task> getAllTaskAllType() { //получения всех задач всех типов
+        ArrayList<Task> allTask = new ArrayList<>();
+
+        allTask.addAll(taskMap.values());
+        allTask.addAll(epicMap.values());
+        allTask.addAll(subMap.values());
+
+        return allTask;
+    }
+
+    public ArrayList<SubTask> getSubTasksFromEpic(int epicId) { //метод для получения списка подзадач из эпика
+        ArrayList<SubTask> tasks = new ArrayList<>();
+        if (epicMap.containsKey(epicId)) {
+            EpicTask epic = epicMap.get(epicId);
+            for (int i : epic.subTasks.keySet()) {
+                tasks.add(epic.subTasks.get(i));
             }
         }
-        return AllTask;
+        return tasks;
     }
 
-    public static HashMap<Integer, Task> getAllEpicTask() { //метод для получения всех эпиков
-        HashMap<Integer, Task> AllEpicTask = new HashMap<>();
-        int j = 1;
-
-        for (int i = 1; i <= idNumber; i++) {
-            if (getTask(i) != null && getTask(i).getClass() == EpicTask.class) {
-                AllEpicTask.put(j++, getTask(i));
-            }
-        }
-        return AllEpicTask;
-    }
-
-    public static ArrayList<Task> getAllSubTask() { //метод для получения всех подзадачи из всех эпиков
-        ArrayList<Task> subTasks = new ArrayList<>();
-
-
-        for (int i = 1; i <= idNumber; i++) {
-            if (getTask(i) != null && getTask(i).getClass() == EpicTask.class) {
-                EpicTask epic = (EpicTask) getTask(i);
-                for (int j = 0; j < epic.getSubTasks().size(); j++) {
-                    subTasks.add(epic.getSubTasks().get(j));
-                }
-            }
-        }
-        return subTasks;
-    }
-
-    public static HashMap<Integer, Task> getAllTaskAllType() { //получения всех задач всех типов
-        HashMap<Integer, Task> AllTask = new HashMap<>();
-
-        for (int i = 1; i <= idNumber; i++) {
-            if (getTask(i) != null) {
-                AllTask.put(i, getTask(i));
-            }
-        }
-        return AllTask;
-    }
-
-    public static ArrayList<Task> getSubTaskFromEpic(int id) { //метод для получения списка подзадач из эпика
-        EpicTask e = (EpicTask) taskMap.get(id);
-
-        return e.subTasks;
-    }
-
-
-    public static void removeAll() { //метод для удаления всех задач
-        for (int i = 0; i <= idNumber; i++) {
-            taskMap.remove(i);
-        }
-    }
-
-    public static void remove(int i) { //метод для удаления по Ид
-        taskMap.remove(i);
-    }
-
-
-    public static void createTask(Task task) { //метод для создания обычной задачи
+    public void createTask(Task task) { //метод для создания обычной задачи
+        task.setId(assignId());
         taskMap.put(task.getId(), task);
     }
 
 
-    public static void createEpic(EpicTask epicTask) { //метод для создания эпика
-        taskMap.put(epicTask.getId(), epicTask);
+    public void createEpic(EpicTask epicTask) { //метод для создания эпика
+        epicTask.setId(assignId());
+        epicMap.put(epicTask.getId(), epicTask);
     }
 
-    public static void createSubTask(SubTask subTask) { //метод для создания и добавления подзадач в эпик
-        EpicTask epic = (EpicTask) taskMap.get(subTask.getEpicId());
-        epic.setSubTask(subTask);
-        epic.setStatus(epic);
+    public void createSubTask(SubTask subTask) {//метод для создания и добавления подзадач в эпик
 
-        taskMap.put(epic.getId(), epic);
+        if (epicMap.containsKey(subTask.getEpicId())) {
+            subTask.setId(assignId());
+            subMap.put(subTask.getId(), subTask); //сначала кладем подзадачу в общее хранилище подзадач
 
-    }
-
-    public static void updateTask(int id, Task task) { //метод для обновления обычной задачи
-        if (taskMap.containsKey(id)) {
-            taskMap.put(id, task);
+            EpicTask epic = epicMap.get(subTask.getEpicId());
+            epic.setSubTask(subTask);
+            epic.setStatus();
+            epicMap.put(epic.getId(), epic); //кладем подзадачу в соответствюущий эпик
         }
     }
 
-    public static void updateSubTask(int taskId, SubTask task) { //метод для обновления подзадачи
-        EpicTask epic = (EpicTask) taskMap.get(task.getEpicId());
-        int x = -1;
 
-        for (Task subTask : epic.getSubTasks()) {
-            if (subTask.getId() == taskId) {
-                x = epic.getSubTasks().indexOf(subTask);
-            }
+    public void removeAllTask() { //метод для удаления всех задач
+        taskMap.clear();
+    }
+
+    public void removeAllEpic() {//метод для удаления всех задач
+
+        epicMap.clear();           // !!! не очень понимаю, нужно в это методе удалять так же и все подзадачи (Subtask)?
+        /*subMap.clear();*/        // ибо по логике, у нас же не может быть подзадач без Эпик задачи
+    }
+
+    public void removeAllSub() { //метод для удаления всех задач
+        subMap.clear();
+    }
+
+    public void removeTask(int id) { //метод для удаления по Ид
+        taskMap.remove(id);
+    }
+
+    public void removeEpic(int id) {
+        epicMap.remove(id);
+    }
+
+    public void removeSub(int id) {
+        if (subMap.containsKey(id)) {
+            epicMap.get(subMap.get(id).getEpicId()).removeSub(id);
+            subMap.remove(id);
         }
+    } //данный метод при передаче айди удаляет подзадачу как из эпика, так и из хранилища со всеми подзадачами
 
-        if (x >= 0) {
-            epic.subTasks.remove(x);
-            epic.subTasks.add(task);
-            epic.setStatus(epic);
-            taskMap.put(task.getEpicId(), epic);
+
+    public void updateTask(Task task) { //метод для обновления обычной задачи
+        if (taskMap.containsKey(task.getId())) {
+            taskMap.put(task.getId(), task);
+        }
+    }
+
+    public void updateEpicTask(EpicTask epicTask) {
+        if (epicMap.containsKey(epicTask.getId())) {
+            epicMap.get(epicTask.getId()).setTitle(epicTask.getTitle());
+            epicMap.get(epicTask.getId()).setDescription(epicTask.getDescription());
+        }
+    }
+
+    public void updateSubTask(SubTask subTask) { //метод для обновления подзадачи
+        if (subMap.containsKey(subTask.getId()) && epicMap.containsKey(subTask.getEpicId())) {
+            subMap.put(subTask.getId(), subTask);
+            epicMap.get(subTask.getEpicId()).setSubTask(subTask);
         }
     }
 
