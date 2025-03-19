@@ -18,6 +18,14 @@ public class TaskManager {
         return taskMap.get(id);
     }
 
+    public EpicTask getEpicTask(int id) {
+        return epicMap.get(id);
+    }
+
+    public SubTask getSubTask(int id) {
+        return subMap.get(id);
+    }
+
     public ArrayList<Task> getAllTask() {  //метод для получения всех обычных задач
         ArrayList<Task> tasks = new ArrayList<>();
         for (int i : taskMap.keySet()) {
@@ -57,8 +65,8 @@ public class TaskManager {
         ArrayList<SubTask> tasks = new ArrayList<>();
         if (epicMap.containsKey(epicId)) {
             EpicTask epic = epicMap.get(epicId);
-            for (int i : epic.subTasks.keySet()) {
-                tasks.add(epic.subTasks.get(i));
+            for (int i : epic.getSubTasks().keySet()) {
+                tasks.add(epic.getSubTasks().get(i));
             }
         }
         return tasks;
@@ -81,10 +89,8 @@ public class TaskManager {
             subTask.setId(assignId());
             subMap.put(subTask.getId(), subTask); //сначала кладем подзадачу в общее хранилище подзадач
 
-            EpicTask epic = epicMap.get(subTask.getEpicId());
-            epic.setSubTask(subTask);
-            epic.setStatus();
-            epicMap.put(epic.getId(), epic); //кладем подзадачу в соответствюущий эпик
+            epicMap.get(subTask.getEpicId()).setSubTask(subTask);
+            epicMap.get(subTask.getEpicId()).setStatus();           //кладем подзадачу в соответствюущий эпик
         }
     }
 
@@ -95,11 +101,15 @@ public class TaskManager {
 
     public void removeAllEpic() {//метод для удаления всех задач
 
-        epicMap.clear();           // !!! не очень понимаю, нужно в это методе удалять так же и все подзадачи (Subtask)?
-        /*subMap.clear();*/        // ибо по логике, у нас же не может быть подзадач без Эпик задачи
+        epicMap.clear();
+        subMap.clear();
     }
 
     public void removeAllSub() { //метод для удаления всех задач
+        for (EpicTask epic : epicMap.values()) {
+            epic.getSubTasks().clear();
+            epic.setStatus();
+        }
         subMap.clear();
     }
 
@@ -108,12 +118,22 @@ public class TaskManager {
     }
 
     public void removeEpic(int id) {
+        ArrayList<Integer> deleteKey = new ArrayList<>();
+        for (int i : subMap.keySet()) {
+            if (subMap.get(i).getEpicId() == id) {
+              deleteKey.add(i);
+            }
+        }
+        for (int i : deleteKey) {
+            subMap.remove(i);
+        }
         epicMap.remove(id);
     }
 
     public void removeSub(int id) {
         if (subMap.containsKey(id)) {
             epicMap.get(subMap.get(id).getEpicId()).removeSub(id);
+            epicMap.get(subMap.get(id).getEpicId()).setStatus();
             subMap.remove(id);
         }
     } //данный метод при передаче айди удаляет подзадачу как из эпика, так и из хранилища со всеми подзадачами
@@ -133,9 +153,11 @@ public class TaskManager {
     }
 
     public void updateSubTask(SubTask subTask) { //метод для обновления подзадачи
-        if (subMap.containsKey(subTask.getId()) && epicMap.containsKey(subTask.getEpicId())) {
+        if (subMap.containsKey(subTask.getId()) && epicMap.containsKey(subTask.getEpicId()) &&
+                subMap.get(subTask.getId()).getEpicId() == subTask.getEpicId()) {
             subMap.put(subTask.getId(), subTask);
             epicMap.get(subTask.getEpicId()).setSubTask(subTask);
+            epicMap.get(subTask.getEpicId()).setStatus();
         }
     }
 

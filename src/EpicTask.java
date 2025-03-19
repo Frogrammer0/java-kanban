@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class EpicTask extends Task {
-    HashMap<Integer, SubTask> subTasks;
+    private HashMap<Integer, SubTask> subTasks;
 
     public EpicTask(String title, String description) {
         super(title, description, Status.NEW);
@@ -39,20 +39,24 @@ public class EpicTask extends Task {
     public void setStatus() { //метод для обновления статуса эпика
         boolean hasNew = false;
         boolean hasDone = false;
+        boolean hasProgress = false;
+
 
         for (SubTask sub : this.subTasks.values()) {
             if (sub.status == Status.NEW) {
                 hasNew = true;
             } else if (sub.status == Status.DONE) {
                 hasDone = true;
+            } else if(sub.status == Status.IN_PROGRESS) {
+                hasProgress = true;
             }
         }
 
-        if (hasNew && hasDone) {
+        if (hasNew && hasDone || hasProgress) {
             this.setStatus(Status.IN_PROGRESS);
+        } else {
+            this.status = hasDone ? Status.DONE : Status.NEW;
         }
-
-        this.status = hasDone ? Status.DONE : Status.NEW;
     }
 
 
