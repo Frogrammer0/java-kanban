@@ -2,10 +2,13 @@ public class Main {
 
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager manager = Managers.getDefault();
 
 
-        Task task1 = new Task("tit1", "dis1", Status.NEW); //задачи
+
+
+
+        /*Task task1 = new Task("tit1", "dis1", Status.NEW); //задачи
         Task task2 = new Task("tit2", "dis2", Status.NEW);
         Task task3 = new Task("tit3", "dis3", Status.NEW);
         EpicTask epic1 = new EpicTask("epic1", "disE1"); // эпики
@@ -18,24 +21,23 @@ public class Main {
         SubTask sub23 = new SubTask(5, "sub23", "disS23", Status.DONE);
 
 
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
-        taskManager.createTask(task3);
-        taskManager.createEpic(epic1);
-        taskManager.createEpic(epic2);
-        taskManager.createSubTask(sub11);
-        taskManager.createSubTask(sub12);
-        taskManager.createSubTask(sub13);
-        taskManager.createSubTask(sub21);
-        taskManager.createSubTask(sub22);
-        taskManager.createSubTask(sub23);
+        manager.createTask(task1);
+        manager.createTask(task2);
+        manager.createTask(task3);
 
-        System.out.println(taskManager.getAllTaskAllType());
 
-        taskManager.removeEpic(4);
+        manager.createTask(epic1);
+        manager.createTask(epic2);
+        manager.createTask(sub11);
+        manager.createTask(sub12);
+        manager.createTask(sub13);
+        manager.createTask(sub21);
+        manager.createTask(sub22);
+        manager.createTask(sub23);
 
-        System.out.println(taskManager.getAllTaskAllType());
 
+
+        System.out.println(manager.getAllTaskAllType());*/
 
 
     }
