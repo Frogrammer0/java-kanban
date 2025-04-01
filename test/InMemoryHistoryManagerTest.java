@@ -44,6 +44,7 @@ class InMemoryHistoryManagerTest {
 
         assertEquals(taskFromHist, oldTask, "В историю сохранена другая версия");
 
+
         assertEquals(taskManager.getTask(1), updTask, "В массиве лежит не новая задача ");
     }
 

@@ -12,7 +12,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (history.size() == 10) {
             history.removeFirst();
         }
-        history.addLast(task);
+        Task copyTask = new Task(task.getTitle(), task.getDescription(), task.getStatus());
+        copyTask.setId(task.getId());
+        history.addLast(copyTask);
     }
 
     @Override
