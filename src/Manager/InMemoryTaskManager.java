@@ -8,10 +8,10 @@ import TaskObject.*;
 public class InMemoryTaskManager implements TaskManager {
 
     private int idNumber = 0;
-    private Map<Integer, Task> taskMap = new HashMap<>();
-    private Map<Integer, EpicTask> epicMap = new HashMap<>();
-    private Map<Integer, SubTask> subMap = new HashMap<>();
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Map<Integer, Task> taskMap = new HashMap<>();
+    private final Map<Integer, EpicTask> epicMap = new HashMap<>();
+    private final Map<Integer, SubTask> subMap = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public List<Task> getHistory() {
@@ -112,16 +112,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTask(Task task) { //метод для создания любой задачи
         task.setId(assignId());
-        if (task instanceof SubTask) {
-            SubTask subTask = (SubTask) task;
+        if (task instanceof SubTask subTask) {
             if (epicMap.containsKey(subTask.getEpicId())) {
                 subMap.put(subTask.getId(), subTask); //сначала кладем подзадачу в общее хранилище подзадач
 
                 epicMap.get(subTask.getEpicId()).setSubTask(subTask);
                 epicMap.get(subTask.getEpicId()).setStatus();           //кладем подзадачу в соответствюущий эпик
             }
-        } else if (task instanceof EpicTask) {
-            EpicTask epic = (EpicTask) task;
+        } else if (task instanceof EpicTask epic) {
             epicMap.put(epic.getId(), epic);
         } else {
             taskMap.put(task.getId(), task);
