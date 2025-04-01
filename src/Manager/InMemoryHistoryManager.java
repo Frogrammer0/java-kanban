@@ -1,8 +1,11 @@
+package Manager;
 import java.util.ArrayList;
+import java.util.List;
+import TaskObject.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static final ArrayList<Task> history = new ArrayList<>(10);
+    private final ArrayList<Task> history = new ArrayList<>(10);
 
     @Override
     public void add(Task task) {
@@ -13,9 +16,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        return  history;
+    public List<Task> getHistory() {
+        return new ArrayList<>(history);
     }
+
+
 
 
 }

@@ -1,13 +1,14 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import TaskObject.*;
+import Manager.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
-    InMemoryHistoryManager history = new InMemoryHistoryManager();
+    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
     @AfterEach
     void clearAll() {
@@ -19,9 +20,9 @@ class InMemoryHistoryManagerTest {
         Task task = new Task("tit1", "dis1", Status.NEW);
         taskManager.createTask(task);
 
-        history.add(task);
+        historyManager.add(task);
 
-        assertEquals(task, history.getHistory().getFirst(), "Объекты не совпадают");
+        assertEquals(task, historyManager.getHistory().getFirst(), "Объекты не совпадают");
     }
 
     @Test
@@ -39,12 +40,13 @@ class InMemoryHistoryManagerTest {
 
         taskManager.updateTask(updTask);
 
-        Task taskFromHist = history.getHistory().getFirst();
+        Task taskFromHist = taskManager.getHistory().getFirst();
 
         assertEquals(taskFromHist, oldTask, "В историю сохранена другая версия");
 
         assertEquals(taskManager.getTask(1), updTask, "В массиве лежит не новая задача ");
     }
+
 
 
 }

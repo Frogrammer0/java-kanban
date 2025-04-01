@@ -1,14 +1,34 @@
+package Manager;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import TaskObject.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private static int idNumber = 0;
-    public HashMap<Integer, Task> taskMap = new HashMap<>();
-    public HashMap<Integer, EpicTask> epicMap = new HashMap<>();
-    public HashMap<Integer, SubTask> subMap = new HashMap<>();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    private int idNumber = 0;
+    private Map<Integer, Task> taskMap = new HashMap<>();
+    private Map<Integer, EpicTask> epicMap = new HashMap<>();
+    private Map<Integer, SubTask> subMap = new HashMap<>();
+    private HistoryManager historyManager = Managers.getDefaultHistory();
 
+    @Override
+    public List<Task> getHistory() {
+        return new ArrayList<>(historyManager.getHistory());
+    }
+
+    public Map<Integer, Task> getTaskMap() {
+        return taskMap;
+    }
+
+    public Map<Integer, EpicTask> getEpicMap() {
+        return epicMap;
+    }
+
+    public Map<Integer, SubTask> getSubMap() {
+        return subMap;
+    }
 
     private int assignId() { //метод для присвоения Ид
         idNumber++;
@@ -77,8 +97,8 @@ public class InMemoryTaskManager implements TaskManager {
         return allTask;
     }
 
-    //перегружен
-    public ArrayList<SubTask> getAllSubTask(int epicId) { //метод для получения списка подзадач из эпика
+    @Override
+    public ArrayList<SubTask> getAllSubTasksByEpicId(int epicId) { //метод для получения списка подзадач из эпика
         ArrayList<SubTask> tasks = new ArrayList<>();
         if (epicMap.containsKey(epicId)) {
             EpicTask epic = epicMap.get(epicId);

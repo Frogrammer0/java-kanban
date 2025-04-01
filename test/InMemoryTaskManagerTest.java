@@ -1,6 +1,9 @@
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import TaskObject.*;
+import Manager.*;
+
 
 import java.util.ArrayList;
 
@@ -69,7 +72,7 @@ class InMemoryTaskManagerTest {
         assertEquals(sub11, savedTask1, "Задачи не совпадают");
         assertEquals(sub12, savedTask2, "Задачи не совпадают");
 
-        ArrayList<SubTask> tasks = taskManager.getAllSubTask(1);
+        ArrayList<SubTask> tasks = taskManager.getAllSubTasksByEpicId(1);
 
         assertNotNull(tasks, "Список задач возвращается пустым");
         assertEquals(2, tasks.size(), "Неверный размер списка");
@@ -105,7 +108,7 @@ class InMemoryTaskManagerTest {
 
         ArrayList<SubTask> subs = taskManager.getAllSubTask();
 
-        assertArrayEquals(subs.toArray(new Object[2]), taskManager.subMap.values().toArray(new SubTask[2]));
+        assertArrayEquals(subs.toArray(new Object[2]), taskManager.getSubMap().values().toArray(new SubTask[2]));
 
     }
 
@@ -119,7 +122,7 @@ class InMemoryTaskManagerTest {
         taskManager.createTask(sub12);
         taskManager.removeAllSub();
 
-        assertEquals(0, taskManager.subMap.size(), "Список подзадач не пуст");
+        assertEquals(0, taskManager.getSubMap().size(), "Список подзадач не пуст");
 
     }
 
@@ -132,7 +135,7 @@ class InMemoryTaskManagerTest {
 
         taskManager.removeAllTask();
 
-        assertEquals(0, taskManager.taskMap.size(), "Спискок задач не пуст");
+        assertEquals(0, taskManager.getTaskMap().size(), "Спискок задач не пуст");
     }
 
     @Test
@@ -148,8 +151,8 @@ class InMemoryTaskManagerTest {
 
         taskManager.removeAllEpic();
 
-        assertEquals(0, taskManager.epicMap.size(), "Список эпиков не пуст");
-        assertEquals(0, taskManager.subMap.size(), "Список подзадач из удаленных эпиков не пуст");
+        assertEquals(0, taskManager.getEpicMap().size(), "Список эпиков не пуст");
+        assertEquals(0, taskManager.getSubMap().size(), "Список подзадач из удаленных эпиков не пуст");
 
     }
 
@@ -167,17 +170,17 @@ class InMemoryTaskManagerTest {
         taskManager.createTask(epic1);
 
         taskManager.removeTask(1);
-        assertEquals(0, taskManager.taskMap.size(), "Задача не удалена");
+        assertEquals(0, taskManager.getTaskMap().size(), "Задача не удалена");
 
         taskManager.removeEpic(5);
-        assertEquals(1, taskManager.epicMap.size(), "Пустой эпик не удален");
+        assertEquals(1, taskManager.getEpicMap().size(), "Пустой эпик не удален");
 
         taskManager.removeSub(3);
-        assertEquals(1, taskManager.subMap.size(), "Подзадача отдельно не удалена");
+        assertEquals(1, taskManager.getSubMap().size(), "Подзадача отдельно не удалена");
 
         taskManager.removeEpic(2);
-        assertEquals(0, taskManager.epicMap.size(), "Эпик с подзадачей не удален");
-        assertEquals(0, taskManager.subMap.size(), "Подзадача не удалена вместе с эпиком ");
+        assertEquals(0, taskManager.getEpicMap().size(), "Эпик с подзадачей не удален");
+        assertEquals(0, taskManager.getSubMap().size(), "Подзадача не удалена вместе с эпиком ");
 
     }
 
