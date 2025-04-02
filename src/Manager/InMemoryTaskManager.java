@@ -102,8 +102,8 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<SubTask> tasks = new ArrayList<>();
         if (epicMap.containsKey(epicId)) {
             EpicTask epic = epicMap.get(epicId);
-            for (int i : epic.getSubTasks().keySet()) {
-                tasks.add(epic.getSubTasks().get(i));
+            for (int i : epic.getSubTasksId()) {
+                tasks.add(subMap.get(i));
             }
         }
         return tasks;
@@ -114,10 +114,10 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(assignId());
         if (task instanceof SubTask subTask) {
             if (epicMap.containsKey(subTask.getEpicId())) {
-                subMap.put(subTask.getId(), subTask); //сначала кладем подзадачу в общее хранилище подзадач
+                getSubMap().put(subTask.getId(), subTask); //сначала кладем подзадачу в общее хранилище подзадач
 
-                epicMap.get(subTask.getEpicId()).setSubTask(subTask);
-                epicMap.get(subTask.getEpicId()).setStatus();           //кладем подзадачу в соответствюущий эпик
+                epicMap.get(subTask.getEpicId()).setSubTasksId(subTask.getId());
+                setEpicStatus(epicMap.get(subTask.getEpicId()));           //кладем подзадачу в соответствюущий эпик
             }
         } else if (task instanceof EpicTask epic) {
             epicMap.put(epic.getId(), epic);
@@ -140,10 +140,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllSub() { //метод для удаления всех задач
+    public void removeAllSub() { //метод для удаления всех подзадач
         for (EpicTask epic : epicMap.values()) {
-            epic.getSubTasks().clear();
-            epic.setStatus();
+            epic.getSubTasksId().clear();
+            setEpicStatus(epic);
         }
         subMap.clear();
     }
@@ -162,13 +162,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(int id) {
-        ArrayList<Integer> deleteKey = new ArrayList<>();
-        for (int i : subMap.keySet()) {
-            if (subMap.get(i).getEpicId() == id) {
-                deleteKey.add(i);
-            }
-        }
-        for (int i : deleteKey) {
+
+        for (int i : epicMap.get(id).getSubTasksId()) {
             subMap.remove(i);
         }
         epicMap.remove(id);
@@ -177,8 +172,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeSub(int id) {
         if (subMap.containsKey(id)) {
-            epicMap.get(subMap.get(id).getEpicId()).removeSub(id);
-            epicMap.get(subMap.get(id).getEpicId()).setStatus();
+            epicMap.get(subMap.get(id).getEpicId()).removeSubId(id);
+
+            setEpicStatus(epicMap.get(subMap.get(id).getEpicId()));
+
             subMap.remove(id);
         }
     } //данный метод при передаче айди удаляет подзадачу как из эпика, так и из хранилища со всеми подзадачами
@@ -196,16 +193,40 @@ public class InMemoryTaskManager implements TaskManager {
         if (epicMap.containsKey(epicTask.getId())) {
             epicMap.get(epicTask.getId()).setTitle(epicTask.getTitle());
             epicMap.get(epicTask.getId()).setDescription(epicTask.getDescription());
+            setEpicStatus(epicMap.get(epicTask.getId()));
         }
     }
 
-    //перегружен
+
     public void updateSubTask(SubTask subTask) { //метод для обновления подзадачи
         if (subMap.containsKey(subTask.getId()) && epicMap.containsKey(subTask.getEpicId()) &&
                 subMap.get(subTask.getId()).getEpicId() == subTask.getEpicId()) {
             subMap.put(subTask.getId(), subTask);
-            epicMap.get(subTask.getEpicId()).setSubTask(subTask);
-            epicMap.get(subTask.getEpicId()).setStatus();
+            epicMap.get(subTask.getEpicId()).setSubTasksId(subTask.getId());
+            setEpicStatus(epicMap.get(subTask.getEpicId()));
+        }
+    }
+
+    public void setEpicStatus(EpicTask epicTask) { //метод для обновления статуса эпика
+        boolean hasNew = false;
+        boolean hasDone = false;
+        boolean hasProgress = false;
+
+        for (int i : epicTask.getSubTasksId()) {
+
+                if (subMap.get(i).getStatus() == Status.NEW) {
+                    hasNew = true;
+                } else if (subMap.get(i).getStatus() == Status.DONE) {
+                    hasDone = true;
+                } else if (subMap.get(i).getStatus() == Status.IN_PROGRESS) {
+                    hasProgress = true;
+                }
+
+        }
+        if (hasNew && hasDone || hasProgress) {
+            epicTask.setStatus(Status.IN_PROGRESS);
+        } else {
+            epicTask.setStatus(hasDone ? Status.DONE : Status.NEW);
         }
     }
 

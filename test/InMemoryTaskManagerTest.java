@@ -120,6 +120,9 @@ class InMemoryTaskManagerTest {
         SubTask sub12 = new SubTask(1, "sub12", "disS12", Status.DONE);
         taskManager.createTask(sub11);
         taskManager.createTask(sub12);
+
+        assertEquals(2, taskManager.getSubMap().size(), "Список подзадач не наполнен");
+
         taskManager.removeAllSub();
 
         assertEquals(0, taskManager.getSubMap().size(), "Список подзадач не пуст");
@@ -157,7 +160,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeTask() {
+    void removeTaskFromId() {
         Task task = new Task("tit1", "dis1", Status.NEW);
         taskManager.createTask(task);
         EpicTask epic1 = new EpicTask("epic1", "disE1");
@@ -167,7 +170,8 @@ class InMemoryTaskManagerTest {
         taskManager.createTask(sub11);
         taskManager.createTask(sub12);
         EpicTask epic2 = new EpicTask("epic2", "disE2");
-        taskManager.createTask(epic1);
+        taskManager.createTask(epic2);
+
 
         taskManager.removeTask(1);
         assertEquals(0, taskManager.getTaskMap().size(), "Задача не удалена");

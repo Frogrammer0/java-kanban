@@ -1,12 +1,13 @@
 package TaskObject;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EpicTask extends Task {
-    private HashMap<Integer, SubTask> subTasks;
+    private List<Integer> subTasksId;
 
     public EpicTask(String title, String description) {
         super(title, description, Status.NEW);
-        subTasks = new HashMap<>();
+        subTasksId = new ArrayList<>();
     }
 
     @Override
@@ -16,49 +17,30 @@ public class EpicTask extends Task {
                 ", description='" + description + '\'' +
                 ", id=" + getId() +
                 ", status=" + status +
-                "\nsubTasks=" + subTasks +
+                "\nsubTasks=" + subTasksId +
                 '}';
     }
 
-    public HashMap<Integer, SubTask> getSubTasks() {
-        return subTasks;
+    public List<Integer> getSubTasksId() {
+        return subTasksId;
     }
 
-    public void setSubTask(SubTask subTask) {//метод для добавления подзадачи в спискок эпика
-        subTasks.put(subTask.getId(), subTask);
+    public void setSubTasksId(Integer id) {//метод для добавления подзадачи в спискок эпика
+        subTasksId.add(id);
     }
 
-    public void removeSub(int id) {
-        subTasks.remove(id);
+    public void removeSubId(Integer id) {
+        subTasksId.remove(id);
     }
 
     public void removeAllSubTasks() {
-        subTasks.clear();
+        subTasksId.clear();
 
     }
 
-    public void setStatus() { //метод для обновления статуса эпика
-        boolean hasNew = false;
-        boolean hasDone = false;
-        boolean hasProgress = false;
 
 
-        for (SubTask sub : this.subTasks.values()) {
-            if (sub.status == Status.NEW) {
-                hasNew = true;
-            } else if (sub.status == Status.DONE) {
-                hasDone = true;
-            } else if(sub.status == Status.IN_PROGRESS) {
-                hasProgress = true;
-            }
-        }
 
-        if (hasNew && hasDone || hasProgress) {
-            this.setStatus(Status.IN_PROGRESS);
-        } else {
-            this.status = hasDone ? Status.DONE : Status.NEW;
-        }
-    }
 
 
 }

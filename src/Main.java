@@ -1,4 +1,5 @@
 import Manager.*;
+import TaskObject.*;
 
 
 public class Main {
@@ -11,7 +12,7 @@ public class Main {
 
 
 
-        /*Task task1 = new Task("tit1", "dis1", Status.NEW); //задачи
+/*        Task task1 = new Task("tit1", "dis1", Status.NEW); //задачи
         Task task2 = new Task("tit2", "dis2", Status.NEW);
         Task task3 = new Task("tit3", "dis3", Status.NEW);
         EpicTask epic1 = new EpicTask("epic1", "disE1"); // эпики
@@ -39,6 +40,10 @@ public class Main {
         manager.createTask(sub23);
 
 
+
+        System.out.println(manager.getAllTaskAllType());
+
+        manager.removeSub(6);
 
         System.out.println(manager.getAllTaskAllType());*/
 
