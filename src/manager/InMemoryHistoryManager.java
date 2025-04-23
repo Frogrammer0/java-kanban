@@ -24,7 +24,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
 
-
     @Override
     public List<Task> getHistList() {
         return new ArrayList<>(histList.getTasks());
@@ -88,9 +87,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public void removeNode(Node<Task> node) {
             if (node.prev == null && node.next == null) {
-              tail = null;
-              head = null;
-              size--;
+                tail = null;
+                head = null;
+                size--;
             } else if (node.prev != null && node.next == null) {
                 node.prev.next = null;
                 tail = node.prev;

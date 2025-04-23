@@ -1,4 +1,5 @@
 package taskobject;
+
 public class SubTask extends Task {
 
     private int epicId;
@@ -18,13 +19,13 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "\nSubTask{" +
-                "epicId='" + epicId + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + getId() +
-                ", status=" + status +
-                '}';
+        return "\nSubTask{"
+                + "epicId='" + epicId + '\''
+                + ", title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", id=" + getId()
+                + ", status=" + status
+                + '}';
     }
 
 
