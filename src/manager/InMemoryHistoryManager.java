@@ -38,18 +38,18 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
 
-    public static class HandLinkedList<Task> {
+    public static class HandLinkedList<T> {
 
-        private Node<Task> head;
-        private Node<Task> tail;
+        private Node<T> head;
+        private Node<T> tail;
         private int size = 0;
 
-        static class Node<Task> {
-            public Task data;
-            public Node<Task> prev;
-            public Node<Task> next;
+        static class Node<T> {
+            public T data;
+            public Node<T> prev;
+            public Node<T> next;
 
-            public Node(Node<Task> prev, Task data, Node<Task> next) {
+            public Node(Node<T> prev, T data, Node<T> next) {
                 this.data = data;
                 this.next = next;
                 this.prev = prev;
@@ -60,32 +60,32 @@ public class InMemoryHistoryManager implements HistoryManager {
             return size;
         }
 
-        public void linkLast(Task task) {
-            final Node<Task> oldTail = tail;
-            final Node<Task> newTask = new Node<>(oldTail, task, null);
+        public void linkLast(T t) {
+            final Node<T> oldTail = tail;
+            final Node<T> newTask = new Node<>(oldTail, t, null);
             tail = newTask;
             if (oldTail == null) head = newTask;
             else oldTail.next = newTask;
             size++;
         }
 
-        public Node<Task> getTail() {
+        public Node<T> getTail() {
             return tail;
         }
 
         public ArrayList<Task> getTasks() {
             ArrayList<Task> tasks = new ArrayList<>();
             if (head != null) {
-                Node<Task> node = head;
+                Node<T> node = head;
                 while (node != null) {
-                    tasks.add(node.data);
+                    tasks.add((Task) node.data);
                     node = node.next;
                 }
             }
             return tasks;
         }
 
-        public void removeNode(Node<Task> node) {
+        public void removeNode(Node<T> node) {
             if (node.prev == null && node.next == null) {
                 tail = null;
                 head = null;
