@@ -7,5 +7,7 @@ public interface HistoryManager {
 
     void add(Task task);
 
-    List<Task> getHistory();
+    List<Task> getHistList();
+
+    void removeView(int id);
 }

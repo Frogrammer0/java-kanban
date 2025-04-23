@@ -25,7 +25,7 @@ public class EpicTask extends Task {
         return subTasksId;
     }
 
-    public void setSubTasksId(Integer id) {//метод для добавления подзадачи в спискок эпика
+    public void setSubTasksId(Integer id) {//метод для добавления подзадачи в список эпика
         subTasksId.add(id);
     }
 

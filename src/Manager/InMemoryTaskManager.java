@@ -1,8 +1,6 @@
 package Manager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import TaskObject.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -13,9 +11,10 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, SubTask> subMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(historyManager.getHistory());
+        return new ArrayList<>(historyManager.getHistList());
     }
 
     public Map<Integer, Task> getTaskMap() {
@@ -24,6 +23,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     public Map<Integer, EpicTask> getEpicMap() {
         return epicMap;
+    }
+
+    public void removeHistoryItem(int id) {
+       historyManager.removeView(id);
     }
 
     public Map<Integer, SubTask> getSubMap() {
@@ -35,36 +38,42 @@ public class InMemoryTaskManager implements TaskManager {
         return idNumber;
     }
 
-    private int resetId() {
+    private void resetId() {
         idNumber = 0;
-        return idNumber;
     }
 
 
     @Override
     public Task getTask(int id) { //метод для получения обычной задачи
-        historyManager.add(taskMap.get(id));
-        return taskMap.get(id);
+        if (taskMap.containsKey(id)) {
+            historyManager.add(taskMap.get(id));
+            return taskMap.get(id);
+        } else return null;
+
     }
 
     @Override
     public EpicTask getEpicTask(int id) {
+        if (epicMap.containsKey(id)) {
         historyManager.add(epicMap.get(id));
         return epicMap.get(id);
+        } else return null;
     }
 
     @Override
     public SubTask getSubTask(int id) {
+        if (subMap.containsKey(id)) {
         historyManager.add(subMap.get(id));
         return subMap.get(id);
+        } else return null;
     }
 
     @Override
     public ArrayList<Task> getAllTask() {  //метод для получения всех обычных задач
         ArrayList<Task> tasks = new ArrayList<>();
-        for (int i : taskMap.keySet()) {
-            tasks.add(taskMap.get(i));
-        }
+            for (int i : taskMap.keySet()) {
+                tasks.add(taskMap.get(i));
+            }
         return tasks;
     }
 
@@ -130,7 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllTask() { //метод для удаления всех задач
         taskMap.clear();
-    }
+    }                                     //ДОПИСАТЬ УДАЛЕНИЕ ИЗ ИСТОРИИ
 
     @Override
     public void removeAllEpic() {//метод для удаления всех эпик задач
@@ -158,6 +167,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTask(int id) { //метод для удаления по Ид
         taskMap.remove(id);
+        historyManager.removeView(id);
     }
 
     @Override
@@ -165,8 +175,11 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (int i : epicMap.get(id).getSubTasksId()) {
             subMap.remove(i);
+            historyManager.removeView(i);
         }
         epicMap.remove(id);
+        historyManager.removeView(id);
+
     }
 
     @Override
@@ -178,6 +191,7 @@ public class InMemoryTaskManager implements TaskManager {
 
             subMap.remove(id);
         }
+        historyManager.removeView(id);
     } //данный метод при передаче айди удаляет подзадачу как из эпика, так и из хранилища со всеми подзадачами
 
 

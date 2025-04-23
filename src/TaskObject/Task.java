@@ -1,5 +1,7 @@
 package TaskObject;
 
+import Manager.InMemoryTaskManager;
+
 public class Task {
     protected String title;
     protected String description;
