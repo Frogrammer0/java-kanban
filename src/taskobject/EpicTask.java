@@ -1,4 +1,5 @@
 package taskobject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class EpicTask extends Task {
         return subTasksId;
     }
 
-    public void setSubTasksId(Integer id) {//метод для добавления подзадачи в список эпика
+    public void setSubTasksId(Integer id) { //метод для добавления подзадачи в список эпика
         subTasksId.add(id);
     }
 
@@ -37,10 +38,6 @@ public class EpicTask extends Task {
         subTasksId.clear();
 
     }
-
-
-
-
 
 
 }
