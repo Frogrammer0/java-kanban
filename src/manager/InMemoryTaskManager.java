@@ -1,7 +1,7 @@
-package Manager;
+package manager;
 import java.util.*;
 
-import TaskObject.*;
+import taskobject.*;
 
 public class InMemoryTaskManager implements TaskManager {
 

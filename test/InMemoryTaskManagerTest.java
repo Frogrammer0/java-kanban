@@ -1,8 +1,8 @@
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import TaskObject.*;
-import Manager.*;
+import taskobject.*;
+import manager.*;
 
 
 import java.util.ArrayList;

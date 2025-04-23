@@ -1,11 +1,8 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import TaskObject.*;
-import Manager.*;
-import org.junit.platform.engine.support.hierarchical.Node;
+import taskobject.*;
+import manager.*;
 
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
