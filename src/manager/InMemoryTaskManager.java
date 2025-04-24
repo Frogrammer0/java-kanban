@@ -1,17 +1,22 @@
 package manager;
 
-import java.util.*;
+import taskobject.EpicTask;
+import taskobject.Status;
+import taskobject.SubTask;
+import taskobject.Task;
 
-import taskobject.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private int idNumber = 0;
     private final Map<Integer, Task> taskMap = new HashMap<>();
     private final Map<Integer, EpicTask> epicMap = new HashMap<>();
     private final Map<Integer, SubTask> subMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-
+    private int idNumber = 0;
 
     @Override
     public List<Task> getHistory() {
@@ -139,17 +144,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTask() {                                                     //метод для удаления всех задач
+        for (int id : taskMap.keySet()) {
+            historyManager.removeView(id);
+        }
         taskMap.clear();
     }
 
     @Override
     public void removeAllEpic() {                                           //метод для удаления всех эпик задач
+        for (int id : epicMap.keySet()) {
+            historyManager.removeView(id);
+        }
         epicMap.clear();
         subMap.clear();
     }
 
     @Override
     public void removeAllSub() { //метод для удаления всех подзадач
+        for (int id : subMap.keySet()) {
+            historyManager.removeView(id);
+        }
         for (EpicTask epic : epicMap.values()) {
             epic.getSubTasksId().clear();
             setEpicStatus(epic);
@@ -158,6 +172,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void removeAllTasksAllType() {
+        for (int i = 1; i <= idNumber; i++) {
+            historyManager.removeView(i);
+        }
         taskMap.clear();
         epicMap.clear();
         subMap.clear();

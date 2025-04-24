@@ -1,8 +1,11 @@
 package manager;
 
-import java.util.*;
+import taskobject.Task;
 
-import taskobject.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
@@ -104,9 +107,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 size--;
             }
 
-            node.prev = null;
-            node.next = null;
-            node.data = null;
         }
 
 

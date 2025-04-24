@@ -1,6 +1,8 @@
 package manager;
 
-import taskobject.*;
+import taskobject.EpicTask;
+import taskobject.SubTask;
+import taskobject.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,9 @@ public interface TaskManager {
 
     void removeSub(int id);
 
-    public void removeHistoryItem(int id);
+    void removeAllTasksAllType();
+
+    void removeHistoryItem(int id);
 
     void updateTask(Task task);
 
