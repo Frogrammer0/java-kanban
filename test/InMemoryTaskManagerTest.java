@@ -1,8 +1,8 @@
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import TaskObject.*;
-import Manager.*;
+import taskobject.*;
+import manager.*;
 
 
 import java.util.ArrayList;
@@ -17,12 +17,16 @@ class InMemoryTaskManagerTest {
         taskManager.removeAllTasksAllType();
     }
 
+    //СОЗДАНИЕ РАЗНЫХ ТИПОВ ЗАДАЧ
+
     @Test
     void createTask() {
         Task task1 = new Task("tit1", "dis1", Status.NEW);
         Task task2 = new Task("tit2", "dis2", Status.NEW);
         taskManager.createTask(task1);
         taskManager.createTask(task2);
+
+        assertNull(taskManager.getTask(99), "Получена задача по несуществующему id");
 
         Task savedTask1 = taskManager.getTask(task1.getId());
         Task savedTask2 = taskManager.getTask(task2.getId());
@@ -34,7 +38,8 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tasks, "Список задач возвращается пустым");
         assertEquals(2, tasks.size(), "Неверный размер списка");
-        assertEquals(task1, tasks.getFirst(), "Задачи не совпадают");
+        assertEquals(task1, tasks.getFirst(), "Задачи 1 не совпадают");
+        assertEquals(task2, tasks.getLast(), "Задачи 2 не совпадают");
     }
 
     @Test
@@ -43,6 +48,8 @@ class InMemoryTaskManagerTest {
         EpicTask epic2 = new EpicTask("epic1", "disE1");
         taskManager.createTask(epic1);
         taskManager.createTask(epic2);
+
+        assertNull(taskManager.getEpicTask(99), "Получена Эпик Задача по несуществующему id");
 
         Task savedTask1 = taskManager.getEpicTask(epic1.getId());
         Task savedTask2 = taskManager.getEpicTask(epic2.getId());
@@ -66,6 +73,8 @@ class InMemoryTaskManagerTest {
         taskManager.createTask(sub11);
         taskManager.createTask(sub12);
 
+        assertNull(taskManager.getSubTask(99), "Получена ПодЗадача по несуществующему id");
+
         SubTask savedTask1 = taskManager.getSubTask(sub11.getId());
         SubTask savedTask2 = taskManager.getSubTask(sub12.getId());
 
@@ -81,7 +90,49 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void createAndSearchTaskFromId() {
+    void SetAndChangeEpicStatus() {
+        EpicTask epic1 = new EpicTask("epic1", "disE1");
+        taskManager.createTask(epic1);
+
+        assertEquals(Status.NEW, epic1.getStatus(), "Статус нового эпика не NEW");
+
+        SubTask sub11 = new SubTask(1, "sub11", "disS11", Status.NEW);
+        taskManager.createTask(sub11);
+        SubTask sub12 = new SubTask(1, "sub11", "disS11", Status.IN_PROGRESS);
+        taskManager.createTask(sub12);
+        SubTask sub13 = new SubTask(1, "sub11", "disS11", Status.DONE);
+        taskManager.createTask(sub13);
+
+        assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус эпика с разными задачами не IN_PROGRESS");
+
+        sub11.setStatus(Status.NEW);
+        sub12.setStatus(Status.NEW);
+        sub13.setStatus(Status.NEW);
+        taskManager.updateEpicTask(epic1);
+
+        assertEquals(Status.NEW, epic1.getStatus(), "Статус эпика только с новыми задачами не NEW");
+
+        sub11.setStatus(Status.IN_PROGRESS);
+        sub12.setStatus(Status.IN_PROGRESS);
+        sub13.setStatus(Status.IN_PROGRESS);
+        taskManager.updateEpicTask(epic1);
+
+        assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус эпика с текущими задачами не IN_PROGRESS");
+
+        sub11.setStatus(Status.DONE);
+        sub12.setStatus(Status.DONE);
+        sub13.setStatus(Status.DONE);
+        taskManager.updateEpicTask(epic1);
+
+        assertEquals(Status.DONE, epic1.getStatus(), "Статус эпика с выполненными задачами не DONE");
+
+    }
+
+
+    //ПОЛУЧЕНИЕ РАЗНЫХ ТИПОВ ЗАДАЧ
+
+    @Test
+    void createAndGetTaskFromId() {
         Task task = new Task("tit1", "dis1", Status.NEW);
         taskManager.createTask(task);
 
@@ -95,6 +146,10 @@ class InMemoryTaskManagerTest {
         Task savedTask = taskManager.getTask(1);
         EpicTask savedEpic = taskManager.getEpicTask(2);
         SubTask savedSub = taskManager.getSubTask(3);
+
+        assertEquals(task, savedTask, "Обычные задачи не совпадают");
+        assertEquals(epic1, savedEpic, "ЕпикЗадачи не совпадают");
+        assertEquals(sub11, savedSub, "Подзадачи не совпадают");
     }
 
     @Test
@@ -108,12 +163,16 @@ class InMemoryTaskManagerTest {
 
         ArrayList<SubTask> subs = taskManager.getAllSubTask();
 
-        assertArrayEquals(subs.toArray(new Object[2]), taskManager.getSubMap().values().toArray(new SubTask[2]));
+        assertArrayEquals(subs.toArray(new SubTask[2]), taskManager.getSubMap().values().toArray(new SubTask[2]));
 
     }
 
+
+    //УДАЛЕНИЕ РАЗНЫХ ТИПОВ ЗАДАЧ
+
+
     @Test
-    void removeAllSubTest(){
+    void removeAllSubTest() {
         EpicTask epic1 = new EpicTask("epic1", "disE1");
         taskManager.createTask(epic1);
         SubTask sub11 = new SubTask(1, "sub11", "disS11", Status.DONE);
@@ -130,7 +189,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeAllTask(){
+    void removeAllTask() {
         Task task1 = new Task("tit1", "dis1", Status.NEW);
         Task task2 = new Task("tit2", "dis2", Status.NEW);
         taskManager.createTask(task1);
@@ -188,7 +247,27 @@ class InMemoryTaskManagerTest {
 
     }
 
+    @Test
+    void stayRemovedSubTaskIdInEpic() {
+        EpicTask epic1 = new EpicTask("epic1", "disE1");
+        taskManager.createTask(epic1);
+        SubTask sub11 = new SubTask(1, "sub11", "disS11", Status.DONE);
+        SubTask sub12 = new SubTask(1, "sub12", "disS12", Status.DONE);
+        SubTask sub13 = new SubTask(1, "sub13", "disS13", Status.DONE);
+        taskManager.createTask(sub11);
+        taskManager.createTask(sub12);
+        taskManager.createTask(sub13);
 
+        assertEquals(3, epic1.getSubTasksId().size(), "Эпик хранит неверное число подзадач");
+
+        taskManager.removeSub(2);
+
+        for (int id : epic1.getSubTasksId()) {
+            assertNotEquals(2, id, "В эпике остался id удаленной задачи");
+        }
+
+
+    }
 
 
 }

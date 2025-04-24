@@ -1,4 +1,4 @@
-package TaskObject;
+package taskobject;
 
 public class Task {
     protected String title;
@@ -51,7 +51,6 @@ public class Task {
     public Status getStatus() {
         return status;
     }
-
 
     public int getId() {
         return id;
