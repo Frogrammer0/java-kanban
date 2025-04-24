@@ -155,6 +155,9 @@ public class InMemoryTaskManager implements TaskManager {
         for (int id : epicMap.keySet()) {
             historyManager.removeView(id);
         }
+        for (int id : subMap.keySet()) {
+            historyManager.removeView(id);
+        }
         epicMap.clear();
         subMap.clear();
     }
