@@ -1,7 +1,8 @@
+package manager;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import taskobject.*;
-import manager.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;

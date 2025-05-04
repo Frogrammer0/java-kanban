@@ -192,7 +192,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(int id) {
-
         for (int i : epicMap.get(id).getSubTasksId()) {
             subMap.remove(i);
             historyManager.removeView(i);
