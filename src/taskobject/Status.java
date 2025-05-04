@@ -1,8 +1,8 @@
 package taskobject;
 
 public enum Status {
-    NEW ,
-    IN_PROGRESS ,
+    NEW,
+    IN_PROGRESS,
     DONE;
 
 }
