@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     Path path;
 
-    public FileBackedTaskManager(String fileName){
+    public FileBackedTaskManager(String fileName) {
         try {
             this.path = Paths.get(fileName);
             if (!Files.exists(path)) {
@@ -21,7 +21,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             throw new RuntimeException(e);
         }
     }
-
 
 
     public void save() {
@@ -41,16 +40,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     public static FileBackedTaskManager loadFromFile(File file) throws IOException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file.getPath());
-           try (Reader reader = new FileReader(file)) {
-             BufferedReader br = new BufferedReader(reader);
-             String head = br.readLine();
+        try (Reader reader = new FileReader(file)) {
+            BufferedReader br = new BufferedReader(reader);
+            String head = br.readLine();
             while (br.ready()) {
                 Task task = manager.fromString(br.readLine());
-                    manager.createTask(task);
+                manager.createTask(task);
             }
-           } catch (Exception e) {
-               System.out.println(e.getMessage());
-           }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         return manager;
     }
