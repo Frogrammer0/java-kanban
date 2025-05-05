@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     Path path;
 
     public FileBackedTaskManager(String fileName) {
@@ -23,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
 
-    public void save() {
+    void save() {
         try (BufferedWriter bufferWrite = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING)) {
 
             bufferWrite.write("id,type,name,status,description,epic\n");
@@ -32,29 +32,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 bufferWrite.write(toString(task));
 
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка записи в файл", e);
         }
 
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file.getPath());
         try (Reader reader = new FileReader(file)) {
             BufferedReader br = new BufferedReader(reader);
             String head = br.readLine();
             while (br.ready()) {
                 Task task = manager.fromString(br.readLine());
-                manager.createTask(task);
+                manager.loadTask(task);
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка чтения из файла", e);
         }
 
         return manager;
     }
 
-    public String toString(Task task) {
+    String toString(Task task) {
         if (task instanceof EpicTask) {
             return task.getId() + "," + TaskType.EPICTASK + "," + task.getTitle() + "," + task.getStatus() + "," +
                     task.getDescription() + "\n";
@@ -67,7 +67,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
     }
 
-    public Task fromString(String value) {
+    Task fromString(String value) {
         String[] str = value.split(",");
         Task task;
         if (TaskType.valueOf(str[1]) == TaskType.SUBTASK) {

@@ -263,5 +263,17 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    protected void loadTask(Task task) {
+        if (task.getId() > idNumber) idNumber = task.getId();
+        if (task instanceof EpicTask epic) {
+            epicMap.put(epic.getId(), epic);
+        } else if (task instanceof SubTask sub) {
+            subMap.put(sub.getId(), sub);
+            epicMap.get(sub.getEpicId()).setSubTasksId(sub.getId());
+        } else {
+            taskMap.put(task.getId(), task);
+        }
+    }
+
 
 }

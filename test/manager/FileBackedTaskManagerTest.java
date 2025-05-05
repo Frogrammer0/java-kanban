@@ -7,16 +7,17 @@ import taskobject.EpicTask;
 import taskobject.Status;
 import taskobject.SubTask;
 import taskobject.Task;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileBackedTaskManagerTest {
-File temp;
-FileBackedTaskManager manager;
+    File temp;
+    FileBackedTaskManager manager;
+
     @BeforeEach
     public void createFile() {
         try {
@@ -43,9 +44,9 @@ FileBackedTaskManager manager;
 
         manager = FileBackedTaskManager.loadFromFile(temp);
 
-        assertEquals(task1, manager.getTask(1),  "Записанная и прочитанная задачи не совпадают");
-        assertEquals( epic1, manager.getEpicTask(2), "Записанный и прочитанный Эпик не совпадают");
-        assertEquals(sub11, manager.getSubTask(3),  "Записанная и прочитанная Подзадачи не совпадают");
+        assertEquals(task1, manager.getTask(1), "Записанная и прочитанная задачи не совпадают");
+        assertEquals(epic1, manager.getEpicTask(2), "Записанный и прочитанный Эпик не совпадают");
+        assertEquals(sub11, manager.getSubTask(3), "Записанная и прочитанная Подзадачи не совпадают");
     }
 
     @Test
@@ -58,7 +59,6 @@ FileBackedTaskManager manager;
         assertTrue(manager.getAllTaskAllType().isEmpty());
 
     }
-
 
 
 }
