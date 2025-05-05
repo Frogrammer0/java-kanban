@@ -192,7 +192,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(int id) {
-
         for (int i : epicMap.get(id).getSubTasksId()) {
             subMap.remove(i);
             historyManager.removeView(i);
@@ -261,6 +260,18 @@ public class InMemoryTaskManager implements TaskManager {
             epicTask.setStatus(Status.IN_PROGRESS);
         } else {
             epicTask.setStatus(hasDone ? Status.DONE : Status.NEW);
+        }
+    }
+
+    protected void loadTask(Task task) {
+        if (task.getId() > idNumber) idNumber = task.getId();
+        if (task instanceof EpicTask epic) {
+            epicMap.put(epic.getId(), epic);
+        } else if (task instanceof SubTask sub) {
+            subMap.put(sub.getId(), sub);
+            epicMap.get(sub.getEpicId()).setSubTasksId(sub.getId());
+        } else {
+            taskMap.put(task.getId(), task);
         }
     }
 

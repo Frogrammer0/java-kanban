@@ -3,8 +3,8 @@ package taskobject;
 public class Task {
     protected String title;
     protected String description;
-    private int id;
     protected Status status;
+    private int id;
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -44,31 +44,31 @@ public class Task {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Status getStatus() {
+        return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

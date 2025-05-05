@@ -47,18 +47,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         private Node<T> tail;
         private int size = 0;
 
-        static class Node<T> {
-            public T data;
-            public Node<T> prev;
-            public Node<T> next;
-
-            public Node(Node<T> prev, T data, Node<T> next) {
-                this.data = data;
-                this.next = next;
-                this.prev = prev;
-            }
-        }
-
         public int getSize() {
             return size;
         }
@@ -107,6 +95,18 @@ public class InMemoryHistoryManager implements HistoryManager {
                 size--;
             }
 
+        }
+
+        static class Node<T> {
+            public T data;
+            public Node<T> prev;
+            public Node<T> next;
+
+            public Node(Node<T> prev, T data, Node<T> next) {
+                this.data = data;
+                this.next = next;
+                this.prev = prev;
+            }
         }
 
 

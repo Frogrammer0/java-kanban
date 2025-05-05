@@ -1,14 +1,18 @@
+package manager;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import taskobject.*;
-import manager.*;
+import taskobject.EpicTask;
+import taskobject.Status;
+import taskobject.SubTask;
+import taskobject.Task;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryHistoryManagerTest {
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
-    HistoryManager historyManager = new InMemoryHistoryManager();;
+    HistoryManager historyManager = new InMemoryHistoryManager();
+    ;
 
 
     @AfterEach
@@ -111,7 +115,6 @@ class InMemoryHistoryManagerTest {
         historyManager.add(task5);
 
 
-
         assertEquals(5, historyManager.getHistList().size(), "Не верное кол-во задач в истории");
         assertEquals(task1, historyManager.getHistList().getFirst(), "Первые элементы отличаются");
 
@@ -133,7 +136,6 @@ class InMemoryHistoryManagerTest {
         assertEquals(historyManager.getHistList().getLast(), task4, "Последняя задача в списке не совпадает");
 
     }
-
 
 
 }
