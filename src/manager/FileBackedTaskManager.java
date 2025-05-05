@@ -22,22 +22,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
-    void save() {
-        try (BufferedWriter bufferWrite = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING)) {
-
-            bufferWrite.write("id,type,name,status,description,epic\n");
-            for (Task task : getAllTaskAllType()) {
-
-                bufferWrite.write(toString(task));
-
-            }
-        } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка записи в файл", e);
-        }
-
-    }
-
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file.getPath());
         try (Reader reader = new FileReader(file)) {
@@ -52,6 +36,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
 
         return manager;
+    }
+
+    void save() {
+        try (BufferedWriter bufferWrite = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING)) {
+
+            bufferWrite.write("id,type,name,status,description,epic\n");
+            for (Task task : getAllTaskAllType()) {
+
+                bufferWrite.write(toString(task));
+
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка записи в файл", e);
+        }
+
     }
 
     String toString(Task task) {

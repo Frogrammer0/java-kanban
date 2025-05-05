@@ -2,8 +2,10 @@ package manager;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import taskobject.*;
-
+import taskobject.EpicTask;
+import taskobject.Status;
+import taskobject.SubTask;
+import taskobject.Task;
 
 import java.util.ArrayList;
 
