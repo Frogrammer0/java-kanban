@@ -11,33 +11,41 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager manager = Managers.getFileBacked("testFile");
+        //TaskManager manager = Managers.getFileBacked("testFile");
+
+        TaskManager manager = Managers.getDefault();
 
 
         //ПОЛЬЗОВАТЕЛЬСКИЙ СЦЕНАРИЙ (Дополнительное задание)
 
         Task task1 = new Task("tit1", "dis1", Status.NEW); //задачи
-        Task task2 = new Task("tit2", "dis2", Status.NEW);
+        Task task2 = new Task("tit2", "dis2", "13.00 10.10.25", "200", Status.NEW);
         manager.createTask(task1);
         manager.createTask(task2);
         EpicTask epic1 = new EpicTask("epic1", "disE1"); // эпики
         EpicTask epic2 = new EpicTask("epic2", "disE2");
         manager.createTask(epic1);
         manager.createTask(epic2);
+
         SubTask sub11 = new SubTask(epic1.getId(), "sub21", "disS21", Status.NEW);
-        SubTask sub12 = new SubTask(epic1.getId(), "sub22", "disS22", Status.IN_PROGRESS);
-        SubTask sub13 = new SubTask(epic1.getId(), "sub23", "disS23", Status.DONE);
+        SubTask sub12 = new SubTask(epic1.getId(), "sub22", "disS22", "13.00 12.10.25", "200", Status.IN_PROGRESS);
+        SubTask sub13 = new SubTask(epic1.getId(), "sub23", "disS23", "10.00 11.10.25", "300", Status.DONE);
+
 
         manager.createTask(sub11);
         manager.createTask(sub12);
         manager.createTask(sub13);
 
+        System.out.println(manager.getAllTaskAllType());
 
-        System.out.println(manager.getAllTaskAllType() + "\nit is all\n");
 
-        TaskManager newManager = Managers.getFileBacked("testFile");
+       /* System.out.println(manager.getAllTaskAllType() + "\nit is all\n");
 
-        System.out.println(newManager.getAllTaskAllType() + "\nit is all\n");
+        System.out.println(manager.getPrioritizedTasks() + "\nit is all\n");*/
+
+        //TaskManager newManager = Managers.getFileBacked("testFile");
+
+        //System.out.println(newManager.getAllTaskAllType() + "\nit is all\n");
 
         // ПРОВЕРКА ИСТОРИИ
 

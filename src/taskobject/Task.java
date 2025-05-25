@@ -1,10 +1,18 @@
 package taskobject;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
     protected String title;
     protected String description;
     protected Status status;
     private int id;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
+    public DateTimeFormatter form = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -12,14 +20,26 @@ public class Task {
         this.status = status;
     }
 
+    public Task(String title, String description, String startTime, String duration, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.duration = Duration.ofMinutes(Long.parseLong(duration));
+        this.startTime = LocalDateTime.parse(startTime, form);
+        this.endTime = this.startTime.plus(this.duration);
+    }
+
     @Override
     public String toString() {
         return "\nTask{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
+                ", duration=" + (duration != null ? duration.toMinutes() : "не указано") +
+                ", startTime=" + (startTime != null ? startTime.format(form) : "не указано") +
+                ", endTime=" + (endTime != null ? endTime.format(form) : "не указано") +
                 ", status=" + status +
-                "}";
+                '}';
     }
 
     @Override
@@ -28,7 +48,7 @@ public class Task {
 
         Task task = (Task) o;
         return id == task.id || title.equals(task.title) && description.equals(task.description) &&
-                status.equals(task.status);
+                status.equals(task.status) && startTime.equals(task.startTime);
     }
 
     @Override
@@ -38,7 +58,6 @@ public class Task {
         result = 31 * result + id;
         return result;
     }
-
 
     public String getTitle() {
         return title;
@@ -71,4 +90,30 @@ public class Task {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+
+        return startTime.plus(duration);
+    }
+
+    public long durationInMinute(Duration duration) {
+        return duration.toMinutes();
+    }
+
 }

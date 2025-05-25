@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     Path path;
@@ -41,7 +44,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     void save() {
         try (BufferedWriter bufferWrite = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING)) {
 
-            bufferWrite.write("id,type,name,status,description,epic\n");
+            bufferWrite.write("id,type,name,status,description,start time,duration,epic\n");
             for (Task task : getAllTaskAllType()) {
 
                 bufferWrite.write(toString(task));
@@ -56,13 +59,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     String toString(Task task) {
         if (task instanceof EpicTask) {
             return task.getId() + "," + TaskType.EPICTASK + "," + task.getTitle() + "," + task.getStatus() + "," +
-                    task.getDescription() + "\n";
+                    task.getDescription() + "," +
+                    (task.getStartTime() != null ? task.getStartTime().format(task.form) : "не указано") +
+                    "," + (task.getDuration() != null ? task.durationInMinute(task.getDuration()) : "не указано") + "\n";
         } else if (task instanceof SubTask) {
-            return task.getId() + "," + TaskType.SUBTASK + "," + task.getTitle() + "," + task.getStatus() + ","
-                    + task.getDescription() + "," + ((SubTask) task).getEpicId() + "\n";
+            return task.getId() + "," + TaskType.SUBTASK + "," + task.getTitle() + "," + task.getStatus() + "," +
+                    task.getDescription() + "," +
+                    (task.getStartTime() != null ? task.getStartTime().format(task.form) : "не указано") + "," +
+                    (task.getDuration() != null ? task.durationInMinute(task.getDuration()) : "не указано") +
+                    "," + ((SubTask) task).getEpicId() + "\n";
         } else {
             return task.getId() + "," + TaskType.TASK + "," + task.getTitle() + "," + task.getStatus() + "," +
-                    task.getDescription() + "\n";
+                    task.getDescription() + "," +
+                    (task.getStartTime() != null ? task.getStartTime().format(task.form) : "не указано") +
+                    "," + (task.getDuration() != null ? task.durationInMinute(task.getDuration()) : "не указано") + "\n";
         }
     }
 
@@ -70,12 +80,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String[] str = value.split(",");
         Task task;
         if (TaskType.valueOf(str[1]) == TaskType.SUBTASK) {
-            task = new SubTask(Integer.parseInt(str[5]), str[2], str[4], Status.valueOf(str[3]));
+            task = new SubTask(Integer.parseInt(str[7]), str[2], str[4], Status.valueOf(str[3]));
+            if (!str[5].equals("не указано")) {
+                task.setStartTime(LocalDateTime.parse(str[5], task.form));
+                task.setDuration(Duration.ofMinutes(Long.parseLong(str[6])));
+            }
         } else if (TaskType.valueOf(str[1]) == TaskType.EPICTASK) {
             task = new EpicTask(str[2], str[4]);
             task.setStatus(Status.valueOf(str[3]));
+            if (!str[5].equals("не указано")) {
+                task.setStartTime(LocalDateTime.parse(str[5], task.form));
+                task.setDuration(Duration.ofMinutes(Long.parseLong(str[6])));
+            }
         } else {
             task = new Task(str[2], str[4], Status.valueOf(str[3]));
+            if (!str[5].equals("не указано")) {
+                task.setStartTime(LocalDateTime.parse(str[5], task.form));
+                task.setDuration(Duration.ofMinutes(Long.parseLong(str[6])));
+            }
         }
         task.setId(Integer.parseInt(str[0]));
 
@@ -151,6 +173,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void setEpicStatus(EpicTask epicTask) {
         super.setEpicStatus(epicTask);
+        save();
+    }
+
+    @Override
+    public void setEpicTime(EpicTask epicTask) {
+        super.setEpicTime(epicTask);
         save();
     }
 

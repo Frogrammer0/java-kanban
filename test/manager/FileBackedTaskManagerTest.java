@@ -11,12 +11,15 @@ import taskobject.Task;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     File temp;
-    FileBackedTaskManager manager;
+
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        return new FileBackedTaskManager("testFile");
+    }
 
     @BeforeEach
     public void createFile() {
@@ -50,7 +53,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void saveAndLoadEmptyFile() throws IOException {
+    void saveAndLoadEmptyFile() {
         Task task1 = new Task("tit1", "dis1", Status.NEW);
         manager.createTask(task1);
         manager.removeTask(1);
@@ -60,5 +63,26 @@ class FileBackedTaskManagerTest {
 
     }
 
+    @Test
+    void testLoadException() {
+        File file = new File("");
+        assertThrows(ManagerSaveException.class, () -> {
+            manager = FileBackedTaskManager.loadFromFile(file);
+        }, "Ошибка чтения из файла не привела к исключению");
+    }
 
+    @Test
+    void testSaveException() {
+        FileBackedTaskManager badManager = new FileBackedTaskManager("");
+        assertThrows(ManagerSaveException.class, () -> {
+            badManager.save();
+        }, "Запись в несуществующий файл не привела к исключению");
+    }
+
+    @Test
+    void testConstructorException() {
+        assertThrows(RuntimeException.class, () -> {
+            TaskManager badManager = new FileBackedTaskManager("\0");
+        }, "Запись в несуществующий файл не привела к исключению");
+    }
 }
