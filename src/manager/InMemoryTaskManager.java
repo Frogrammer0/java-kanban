@@ -154,7 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllEpic() {//метод для удаления всех эпик задач
+    public void removeAllEpic() {                                                   //метод для удаления всех эпик задач
         epicMap.keySet().forEach(historyManager::removeView);
         subMap.keySet().forEach(historyManager::removeView);
         epicMap.clear();
