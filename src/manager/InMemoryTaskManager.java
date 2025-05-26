@@ -131,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
                         setEpicTime(epicMap.get(subTask.getEpicId()));
                     }
                 }
-            } else if(!(task instanceof EpicTask)) {
+            } else if (!(task instanceof EpicTask)) {
                 taskMap.put(task.getId(), task);
                 if (task.getStartTime() != null) prioritySet.add(task);
             }
@@ -235,10 +235,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void updateEpicTask(EpicTask epicTask) {
 
-            if (epicMap.containsKey(epicTask.getId())) {
-                epicMap.get(epicTask.getId()).setTitle(epicTask.getTitle());
-                epicMap.get(epicTask.getId()).setDescription(epicTask.getDescription());
-            }
+        if (epicMap.containsKey(epicTask.getId())) {
+            epicMap.get(epicTask.getId()).setTitle(epicTask.getTitle());
+            epicMap.get(epicTask.getId()).setDescription(epicTask.getDescription());
+        }
 
 
     }
