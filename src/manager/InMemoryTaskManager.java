@@ -131,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
                         setEpicTime(epicMap.get(subTask.getEpicId()));
                     }
                 }
-            } else {
+            } else if(!(task instanceof EpicTask)) {
                 taskMap.put(task.getId(), task);
                 if (task.getStartTime() != null) prioritySet.add(task);
             }

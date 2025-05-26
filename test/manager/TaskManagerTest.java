@@ -22,6 +22,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected abstract T createTaskManager();
 
 
+
     //СОЗДАНИЕ РАЗНЫХ ТИПОВ ЗАДАЧ
 
     @Test
@@ -113,21 +114,28 @@ abstract class TaskManagerTest<T extends TaskManager> {
         sub11.setStatus(Status.NEW);
         sub12.setStatus(Status.NEW);
         sub13.setStatus(Status.NEW);
-        manager.updateEpicTask(epic1);
+        manager.updateSubTask(sub11);
+        manager.updateSubTask(sub12);
+        manager.updateSubTask(sub13);
+
 
         assertEquals(Status.NEW, epic1.getStatus(), "Статус эпика только с новыми задачами не NEW");
 
         sub11.setStatus(Status.IN_PROGRESS);
         sub12.setStatus(Status.IN_PROGRESS);
         sub13.setStatus(Status.IN_PROGRESS);
-        manager.updateEpicTask(epic1);
+        manager.updateSubTask(sub11);
+        manager.updateSubTask(sub12);
+        manager.updateSubTask(sub13);
 
         assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус эпика с текущими задачами не IN_PROGRESS");
 
         sub11.setStatus(Status.DONE);
         sub12.setStatus(Status.DONE);
         sub13.setStatus(Status.DONE);
-        manager.updateEpicTask(epic1);
+        manager.updateSubTask(sub11);
+        manager.updateSubTask(sub12);
+        manager.updateSubTask(sub13);
 
         assertEquals(Status.DONE, epic1.getStatus(), "Статус эпика с выполненными задачами не DONE");
 
