@@ -11,7 +11,6 @@ public class Task {
     private int id;
     protected Duration duration;
     protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
     public DateTimeFormatter form = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
 
     public Task(String title, String description, Status status) {
@@ -26,7 +25,7 @@ public class Task {
         this.status = status;
         this.duration = Duration.ofMinutes(Long.parseLong(duration));
         this.startTime = LocalDateTime.parse(startTime, form);
-        this.endTime = this.startTime.plus(this.duration);
+
     }
 
     @Override
@@ -37,7 +36,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", duration=" + (duration != null ? duration.toMinutes() : "не указано") +
                 ", startTime=" + (startTime != null ? startTime.format(form) : "не указано") +
-                ", endTime=" + (endTime != null ? endTime.format(form) : "не указано") +
+                ", endTime=" + (getEndTime() != null ? getEndTime().format(form) : "не указано") +
                 ", status=" + status +
                 '}';
     }
@@ -108,8 +107,8 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-
-        return startTime.plus(duration);
+        if (startTime != null) return startTime.plus(duration);
+        else return null;
     }
 
     public long durationInMinute(Duration duration) {

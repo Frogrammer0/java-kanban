@@ -31,7 +31,7 @@ public class SubTask extends Task {
                 ", description='" + description + '\'' +
                 ", duration=" + (duration != null ? duration.toMinutes() : "не указано") +
                 ", startTime=" + (startTime != null ? startTime.format(form) : "не указано") +
-                ", endTime=" + (endTime != null ? endTime.format(form) : "не указано") +
+                ", endTime=" + (getEndTime() != null ? getEndTime().format(form) : "не указано") +
                 ", status=" + status +
                 '}';
     }

@@ -6,6 +6,7 @@ import java.util.List;
 
 public class EpicTask extends Task {
     private List<Integer> subTasksId;
+    private LocalDateTime endTime;
 
 
     public EpicTask(String title, String description) {
