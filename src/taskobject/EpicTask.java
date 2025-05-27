@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpicTask extends Task {
-    private List<Integer> subTasksId;
+    private final List<Integer> subTasksId;
     private LocalDateTime endTime;
 
 
@@ -45,6 +45,15 @@ public class EpicTask extends Task {
         return result;
     }
 
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     public List<Integer> getSubTasksId() {
         return subTasksId;
     }
@@ -59,11 +68,6 @@ public class EpicTask extends Task {
 
     public void removeAllSubTasks() {
         subTasksId.clear();
-    }
-
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
     }
 
 

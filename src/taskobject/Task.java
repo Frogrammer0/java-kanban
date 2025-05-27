@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
+    public DateTimeFormatter form = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
     protected String title;
     protected String description;
     protected Status status;
-    private int id;
     protected Duration duration;
     protected LocalDateTime startTime;
-    public DateTimeFormatter form = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
+    private int id;
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -90,20 +90,20 @@ public class Task {
         this.id = id;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
     public Duration getDuration() {
         return duration;
     }
 
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public LocalDateTime getEndTime() {

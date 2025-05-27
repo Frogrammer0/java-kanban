@@ -118,6 +118,11 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(Task task) { //метод для создания любой задачи
         task.setId(assignId());
 
+        if (task instanceof EpicTask epic) {
+            epicMap.put(epic.getId(), epic);
+            return;
+        }
+
         if (!hasCross(task)) {
             if (task instanceof SubTask subTask) {
                 if (epicMap.containsKey(subTask.getEpicId())) {
@@ -131,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
                         setEpicTime(epicMap.get(subTask.getEpicId()));
                     }
                 }
-            } else if (!(task instanceof EpicTask)) {
+            } else {
                 taskMap.put(task.getId(), task);
                 if (task.getStartTime() != null) prioritySet.add(task);
             }
@@ -139,9 +144,6 @@ public class InMemoryTaskManager implements TaskManager {
             throw new IllegalArgumentException("Время выполнения пересекается с другой задачей");
         }
 
-        if (task instanceof EpicTask epic) {
-            epicMap.put(epic.getId(), epic);
-        }
 
     }
 
@@ -179,6 +181,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllTasksAllType() {
         historyManager.clearMap();
         historyManager.clearList();
+        prioritySet.clear();
         taskMap.clear();
         epicMap.clear();
         subMap.clear();
@@ -253,7 +256,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epicMap.get(subTask.getEpicId()).setSubTasksId(subTask.getId());
                 setEpicStatus(epicMap.get(subTask.getEpicId()));
                 setEpicTime(epicMap.get(subTask.getEpicId()));
-                prioritySet.add(subTask);
+                if (subTask.getStartTime() != null) prioritySet.add(subTask);
 
             }
         } else {
