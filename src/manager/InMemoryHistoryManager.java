@@ -40,6 +40,16 @@ public class InMemoryHistoryManager implements HistoryManager {
         histMap.remove(id);
     }
 
+    @Override
+    public void clearMap() {
+        histMap.clear();
+    }
+
+    @Override
+    public void clearList() {
+        histList.clear();
+    }
+
 
     public static class HandLinkedList<T> {
 
@@ -80,21 +90,32 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (node.prev == null && node.next == null) {
                 tail = null;
                 head = null;
-                size--;
             } else if (node.prev != null && node.next == null) {
                 node.prev.next = null;
                 tail = node.prev;
-                size--;
             } else if (node.prev == null && node.next != null) {
                 node.next.prev = null;
                 head = node.next;
-                size--;
             } else {
                 node.prev.next = node.next;
                 node.next.prev = node.prev;
-                size--;
             }
+            size--;
 
+        }
+
+        public void clear() {
+            Node<T> current = head;
+            while (current != null) {
+                Node<T> next = current.next;
+                current.prev = null;
+                current.next = null;
+                current.data = null;
+                current = next;
+            }
+            head = null;
+            tail = null;
+            size = 0;
         }
 
         static class Node<T> {

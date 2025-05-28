@@ -4,8 +4,9 @@ import taskobject.EpicTask;
 import taskobject.SubTask;
 import taskobject.Task;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -23,9 +24,17 @@ public interface TaskManager {
 
     List<SubTask> getAllSubTask();
 
-    ArrayList<SubTask> getAllSubTasksByEpicId(int epicId);
+    List<SubTask> getAllSubTasksByEpicId(int epicId);
 
     List<Task> getAllTaskAllType();
+
+    Set<Task> getPrioritizedTasks();
+
+    Map<Integer, SubTask> getSubMap();
+
+    Map<Integer, Task> getTaskMap();
+
+    Map<Integer, EpicTask> getEpicMap();
 
     void createTask(Task task);
 
@@ -50,6 +59,10 @@ public interface TaskManager {
     void updateEpicTask(EpicTask epicTask);
 
     void updateSubTask(SubTask subTask);
+
+    boolean isTaskCross(Task taskA, Task taskB);
+
+    boolean hasCross(Task task);
 
 
 }

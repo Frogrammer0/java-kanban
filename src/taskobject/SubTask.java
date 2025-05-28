@@ -9,6 +9,11 @@ public class SubTask extends Task {
         this.epicId = epicId;
     }
 
+    public SubTask(int epicId, String title, String description, String startTime, String duration, Status status) {
+        super(title, description, startTime, duration, status);
+        this.epicId = epicId;
+    }
+
     public int getEpicId() {
         return epicId;
     }
@@ -19,14 +24,31 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "\nSubTask{"
-                + "epicId='" + epicId + '\''
-                + ", title='" + title + '\''
-                + ", description='" + description + '\''
-                + ", id=" + getId()
-                + ", status=" + status
-                + '}';
+        return "\nSubTask{" +
+                "id=" + getId() +
+                ", epicId='" + epicId + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", duration=" + (duration != null ? duration.toMinutes() : "не указано") +
+                ", startTime=" + (startTime != null ? startTime.format(form) : "не указано") +
+                ", endTime=" + (getEndTime() != null ? getEndTime().format(form) : "не указано") +
+                ", status=" + status +
+                '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
+        SubTask subTask = (SubTask) o;
+        return epicId == subTask.epicId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + epicId;
+        return result;
+    }
 }

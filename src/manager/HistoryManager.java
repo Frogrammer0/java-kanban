@@ -12,4 +12,8 @@ public interface HistoryManager {
     List<Task> getHistList();
 
     void removeView(int id);
+
+    void clearMap();
+
+    void clearList();
 }
