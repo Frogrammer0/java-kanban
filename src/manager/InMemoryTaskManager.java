@@ -39,6 +39,11 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.removeView(id);
     }
 
+    @Override
+    public void clearHistory() {
+        historyManager.clearList();
+    }
+
     public Map<Integer, SubTask> getSubMap() {
         return subMap;
     }
