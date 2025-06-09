@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
-    private final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm dd.MM.yy");
 
 
     @Override
@@ -18,7 +18,7 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(FORMAT.format(value));
+            out.value(formatter.format(value));
         }
     }
 
@@ -29,7 +29,7 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
             return null;
         }
         String dateString = in.nextString();
-        return dateString != null ? LocalDateTime.parse(dateString, FORMAT) : null;
+        return dateString != null ? LocalDateTime.parse(dateString, formatter) : null;
     }
 }
 
