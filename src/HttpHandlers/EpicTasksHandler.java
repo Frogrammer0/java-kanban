@@ -64,6 +64,7 @@ public class EpicTasksHandler extends BaseHttpHandler {
     }
 
     private void handlePost(HttpExchange exchange) throws IOException {
+
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             EpicTask epicTask = gson.fromJson(body, EpicTask.class);
@@ -76,16 +77,15 @@ public class EpicTasksHandler extends BaseHttpHandler {
                 manager.createTask(epicTask);
                 sendResponse(exchange, epicTask, 201);
             } else {
-                if (manager.getTask(epicTask.getId()) != null) {
+                if (manager.getEpicTask(epicTask.getId()) != null) {
                     manager.updateTask(epicTask);
                     sendResponse(exchange, epicTask, 200);
                 } else {
-
                     sendNotFound(exchange, "Задача для обновления не найдена");
                 }
             }
         } catch (Exception e) {
-            sendBadRequest(exchange, "Неверный формат у создаваемой задачи");
+            sendBadRequest(exchange, "Неверный формат у создаваемой задачи: " + e.getMessage());
         }
     }
 
