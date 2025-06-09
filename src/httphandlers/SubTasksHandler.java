@@ -87,7 +87,7 @@ public class SubTasksHandler extends BaseHttpHandler {
     private void handleDelete(HttpExchange exchange) throws IOException {
         String[] pathParts = exchange.getRequestURI().getPath().split("/");
         if (pathParts.length != 3) {
-            sendBadRequest(exchange,"Неверная команда");
+            sendBadRequest(exchange, "Неверная команда");
             return;
         }
 

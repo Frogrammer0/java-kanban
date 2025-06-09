@@ -22,7 +22,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected abstract T createTaskManager();
 
 
-
     //СОЗДАНИЕ РАЗНЫХ ТИПОВ ЗАДАЧ
 
     @Test

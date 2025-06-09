@@ -1,8 +1,8 @@
 package httphandlerstest;
 
-import httphandlers.HttpTaskServer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import httphandlers.HttpTaskServer;
 import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import org.junit.jupiter.api.AfterEach;
@@ -58,11 +58,10 @@ public class HttpTaskServerSubTasksTest {
         HttpClient client = HttpClient.newHttpClient();
 
         URI urlSub = URI.create("http://localhost:8080/subtasks");
-        URI urlEpic= URI.create("http://localhost:8080/epictasks");
+        URI urlEpic = URI.create("http://localhost:8080/epictasks");
         HttpRequest requestEpicPost = HttpRequest.newBuilder().uri(urlEpic).POST(HttpRequest.BodyPublishers.ofString(epicJson)).build();
         HttpRequest requestSub1Post = HttpRequest.newBuilder().uri(urlSub).POST(HttpRequest.BodyPublishers.ofString(sub1TaskJson)).build();
         HttpRequest requestSub2Post = HttpRequest.newBuilder().uri(urlSub).POST(HttpRequest.BodyPublishers.ofString(sub2TaskJson)).build();
-
 
 
         client.send(requestEpicPost, HttpResponse.BodyHandlers.ofString());
@@ -82,7 +81,7 @@ public class HttpTaskServerSubTasksTest {
         HttpClient client = HttpClient.newHttpClient();
         EpicTask epic = new EpicTask("epic1", "disE1");
         String epicJson = gson.toJson(epic);
-        URI urlEpic= URI.create("http://localhost:8080/epictasks");
+        URI urlEpic = URI.create("http://localhost:8080/epictasks");
         HttpRequest requestEpicPost = HttpRequest.newBuilder().uri(urlEpic).POST(HttpRequest.BodyPublishers.ofString(epicJson)).build();
         client.send(requestEpicPost, HttpResponse.BodyHandlers.ofString());
 
@@ -129,7 +128,7 @@ public class HttpTaskServerSubTasksTest {
         HttpClient client = HttpClient.newHttpClient();
         EpicTask epic = new EpicTask("epic1", "disE1");
         String epicJson = gson.toJson(epic);
-        URI urlEpic= URI.create("http://localhost:8080/epictasks");
+        URI urlEpic = URI.create("http://localhost:8080/epictasks");
         HttpRequest requestEpicPost = HttpRequest.newBuilder().uri(urlEpic).POST(HttpRequest.BodyPublishers.ofString(epicJson)).build();
         client.send(requestEpicPost, HttpResponse.BodyHandlers.ofString());
 
@@ -183,8 +182,6 @@ public class HttpTaskServerSubTasksTest {
         assertTrue(tasksFromResponse.isEmpty(), "Хранилище подзадач не пусто");
 
     }
-
-
 
 
 }
