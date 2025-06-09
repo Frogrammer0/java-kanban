@@ -14,9 +14,11 @@ public interface TaskManager {
 
     SubTask getSubTask(int id);
 
-    Task getEpicTask(int id);
+    EpicTask getEpicTask(int id);
 
     List<Task> getHistory();
+
+    void clearHistory();
 
     List<Task> getAllTask();
 
