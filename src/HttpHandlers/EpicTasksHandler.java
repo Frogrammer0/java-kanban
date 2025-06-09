@@ -54,7 +54,7 @@ public class EpicTasksHandler extends BaseHttpHandler {
                     sendNotFound(exchange, "Задача не найдена");
                 }
             } catch (Exception e) {
-                sendBadRequest(exchange, "Неверный формат");
+                sendBadRequest(exchange, "Неверный формат у запрошенной задачи");
             }
         } else {
             sendBadRequest(exchange, "Неверный запрос");
@@ -69,7 +69,7 @@ public class EpicTasksHandler extends BaseHttpHandler {
             EpicTask epicTask = gson.fromJson(body, EpicTask.class);
 
             if (epicTask.getTitle() == null || epicTask.getDescription() == null) {
-                sendBadRequest(exchange, "Неверный формат задачи");
+                sendBadRequest(exchange, "У задачи нет описания");
                 return;
             }
             if (epicTask.getId() == 0) {
@@ -85,7 +85,7 @@ public class EpicTasksHandler extends BaseHttpHandler {
                 }
             }
         } catch (Exception e) {
-            sendBadRequest(exchange, "Неверный формат");
+            sendBadRequest(exchange, "Неверный формат у создаваемой задачи");
         }
     }
 
@@ -107,7 +107,7 @@ public class EpicTasksHandler extends BaseHttpHandler {
                 sendNotFound(exchange, "Задача не найдена");
             }
         } catch (Exception e) {
-            sendBadRequest(exchange, "Неверный формат");
+            sendBadRequest(exchange, "Неверный формат у удаляемой задачи");
         }
     }
 }
