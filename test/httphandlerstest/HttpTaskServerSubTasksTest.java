@@ -1,6 +1,6 @@
-package httpHandlersTest;
+package httphandlerstest;
 
-import httpHandlers.HttpTaskServer;
+import httphandlers.HttpTaskServer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import manager.InMemoryTaskManager;
